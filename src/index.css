@@ -16,6 +16,7 @@ body {
 }
 .cart-item-actions{
   margin-top: 20px;
+  display: inline-flex;
 }
 .action-icons {
   height: 25px;
