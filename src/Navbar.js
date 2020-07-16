@@ -11,7 +11,7 @@ const Navbar = (props) => {
                 <div style={ styles.cartIcon }>
                     {<FontAwesomeIcon icon={faShoppingCart} />}
                 </div>
-                <span style={styles.cartCount}>3</span>
+    <span style={styles.cartCount}>{props.count}</span>
             </div>
         </div>
     );
