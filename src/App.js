@@ -13,21 +13,21 @@ class App extends React.Component {
                 price: 999,
                 title: 'Watch',
                 qty: 1,
-                img: '',
+                img: 'https://imagex.kartrocket.com/image_thewatchshop/data/Flip-9343-1.jpg?imgeng=/w_1000/h_1400',
                 id:1
             },
             {
                 price: 700,
                 title: 'Mobile Phone',
                 qty: 10,
-                img: '',
+                img: 'https://i.pcmag.com/imagery/reviews/04R1s9xuQfmVH4MHFeuaghc-18..v_1570065414.jpg',
                 id:2
             },
             {
                 price: 999,
                 title: 'Laptop',
                 qty: 4,
-                img: '',
+                img: 'https://cdn.mos.cms.futurecdn.net/wEvcfLuHBMb6yopwxHFwg-1200-80.jpg',
                 id:3
             }
         ]
@@ -71,17 +71,29 @@ class App extends React.Component {
     const {products} = this.state;
 
     let count = 0;
+
     products.forEach((product) => {
       count += product.qty;
     })
 
     return count;
   }
+
+  getCartTotal = () => {
+    const {products} = this.state;
+
+    let total = 0;
+
+    products.forEach((product) => {
+      total += product.qty * product.price;
+    })
+
+    return total;
+  }
   render(){
     const { products } = this.state;
   return (
     <div className="App">
-      <header className="App-header">
         <Navbar count={this.getCartCount()}/>
         <Cart
           products={products}
@@ -89,7 +101,7 @@ class App extends React.Component {
           onDecreaseQuantity={this.handleDecreaseQuantity}
           onDeleteProduct={this.handleDeleteProduct}
         />
-      </header>
+        <div style={{ fontSize: 30, padding: 10}}>Total: {this.getCartTotal()}</div>
     </div>
   );
 }
