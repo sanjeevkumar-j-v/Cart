@@ -2,37 +2,42 @@ import React from 'react';
 // import CartItem from './CartItem';
 import Cart from './Cart';
 import Navbar from './Navbar';
-
+import * as firebase from 'firebase';
 class App extends React.Component {
 
   constructor() {
     super();
     this.state = {
-        products: [
-            {
-                price: 999,
-                title: 'Watch',
-                qty: 1,
-                img: 'https://imagex.kartrocket.com/image_thewatchshop/data/Flip-9343-1.jpg?imgeng=/w_1000/h_1400',
-                id:1
-            },
-            {
-                price: 700,
-                title: 'Mobile Phone',
-                qty: 10,
-                img: 'https://i.pcmag.com/imagery/reviews/04R1s9xuQfmVH4MHFeuaghc-18..v_1570065414.jpg',
-                id:2
-            },
-            {
-                price: 999,
-                title: 'Laptop',
-                qty: 4,
-                img: 'https://cdn.mos.cms.futurecdn.net/wEvcfLuHBMb6yopwxHFwg-1200-80.jpg',
-                id:3
-            }
-        ]
+        products: [ ],
+        loading: true
     }
     
+  }
+  componentDidMount () {
+    firebase
+      .firestore()
+      .collection('products')
+      .get()
+      .then((snapshot) => {
+        console.log(snapshot);
+
+        snapshot.docs.map((doc) => {
+          console.log(doc.data());
+        })
+
+        const products = snapshot.docs.map((doc) => {
+          const data = doc.data();
+
+          data['id'] = doc.id;
+
+          return data;
+        })
+
+        this.setState({
+          products,
+          loading: false
+        })
+      })
   }
   handleIncreaseQuantity = (product) =>{
     const { products } = this.state;
@@ -91,7 +96,7 @@ class App extends React.Component {
     return total;
   }
   render(){
-    const { products } = this.state;
+    const { products, loading } = this.state;
   return (
     <div className="App">
         <Navbar count={this.getCartCount()}/>
@@ -101,6 +106,7 @@ class App extends React.Component {
           onDecreaseQuantity={this.handleDecreaseQuantity}
           onDeleteProduct={this.handleDeleteProduct}
         />
+        {loading && <h1>Loading ... </h1>}
         <div style={{ fontSize: 30, padding: 10}}>Total: {this.getCartTotal()}</div>
     </div>
   );
